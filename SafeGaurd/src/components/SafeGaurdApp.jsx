@@ -66,7 +66,7 @@ const HomeScreen = ({ onNavigate, isVerified, darkMode }) => (
       {!isVerified && (
         <button
           onClick={() => onNavigate('verify')}
-          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-lg flex items-center shadow-lg hover:shadow-xl transition-all"
+          className="w-full bg-gradient极o-r from-purple-500 to-pink-500 text-white p-4 rounded-lg flex items-center shadow-lg hover:shadow-xl transition-all"
         >
           <UserCheck className="w-6 h-6 mr-3" />
           <div className="text-left">
@@ -290,7 +290,7 @@ const VerificationScreen = ({ onNavigate, onVerify, darkMode }) => {
 
           <button
             onClick={handleSubmit}
-            className="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600"
+            className="w-full bg-green-500 text-white p-3 rounded-lg hover:极-green-600"
           >
             Submit for Verification
           </button>
@@ -484,4 +484,208 @@ const ReportScreen = ({ onNavigate, darkMode }) => {
         <div className="flex items-center mt-2">
           <input
             type="checkbox"
-  
+            checked={isAnonymous}
+            onChange={(e) => setIsAnonymous(e.target.checked)}
+            className="mr-2"
+          />
+          <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Report anonymously</span>
+        </div>
+
+        <div className={`mt-4 rounded-lg p-4 border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-blue-50 border-blue-200'}`}>
+          <div className="flex items-start">
+            <Lock className="w-5 h-5 text-blue-600 mr-2 mt-0.5" />
+            <div className={darkMode ? 'text-blue-300' : 'text-blue-800'}>
+              <strong>Your privacy matters:</strong> We don't store any personal information. All reports are anonymous.
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSubmit}
+          disabled={!incidentType || !description}
+          className={`w-full mt-4 p-3 rounded-lg text-white ${
+            incidentType && description
+              ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600'
+              : 'bg-gray-300 cursor-not-allowed'
+          }`}
+        >
+          Submit Report
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ResultsScreen = ({ onNavigate, darkMode }) => {
+  const safetyReport = {
+    name: "John Smith",
+    photo: null,
+    riskLevel: "Medium",
+    reports: [
+      {
+        type: "Verbal Harassment",
+        date: "2023-05-15",
+        description: "Inappropriate comments in the workplace"
+      },
+      {
+        type: "Stalking",
+        date: "2023-07-22",
+        description: "Followed after leaving the mall"
+      }
+    ]
+  };
+
+  return (
+    <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gradient-to-b from-blue-50 to-white'}`}>
+      <div className="mb-6">
+        <button
+          onClick={() => onNavigate('check')}
+          className={darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}
+        >
+          ← Back
+        </button>
+        <h2 className={`text-2xl font-bold mt-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Safety Results</h2>
+        <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Safety report details for this person</p>
+      </div>
+
+      <div className="text-center mb-6">
+        <div className={`w-24 h-24 rounded-full mx-auto mb-3 flex items-center justify-center ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+          <User className="w-12 h-12 text-gray-400" />
+        </div>
+        <h3 className={`text-xl font-semibold ${darkMode ? 'text-white' : ''}`}>{safetyReport.name}</h3>
+        <div className={`inline-block px-3 py-1 rounded-full text-sm mt-2 ${
+          safetyReport.riskLevel === "High" ? 'bg-red-100 text-red-800' : 
+          safetyReport.riskLevel === "Medium" ? 'bg-orange-100 text-orange-800' : 
+          'bg-green-100 text-green-800'
+        } ${darkMode ? '!bg-opacity-20' : ''}`}>
+          Risk Level: {safetyReport.riskLevel}
+        </div>
+      </div>
+
+      <div className={`rounded-lg shadow-md p-4 mb-6 ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
+        <div className="flex justify-between items-center">
+          <div>
+            <div className={`text-lg font-bold ${darkMode ? 'text-white' : ''}`}>{safetyReport.reports.length}</div>
+            <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Previous Reports</div>
+          </div>
+          <div className="text-right">
+            <div className={`text-lg font-bold ${darkMode ? 'text-white' : ''}`}>87%</极>
+            <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Match Accuracy</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 className={`font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Recorded Reports</h3>
+      
+      {safetyReport.reports.length === 0 ? (
+        <div className="text-center py-8">
+          <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+          <p className={darkMode ? 'text-gray-300' : 'text-gray-700'}>No negative reports recorded for this person</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {safetyReport.reports.map((report, index) => (
+            <div key={index} className={`border rounded-lg p-4 ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-red-200 bg-red-50'}`}>
+              <div className="flex justify-between">
+                <span className={`font-semibold ${darkMode ? 'text-red-300' : 'text-red-700'}`}>{report.type}</span>
+                <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{report.date}</span>
+              </div>
+              <p className={`mt-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{report.description}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className={`mt-8 rounded-lg p-4 border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-yellow-50 border-yellow-200'}`}>
+        <h4 className={`font-semibold mb-2 ${darkMode ? 'text-yellow-300' : 'text-yellow-800'}`}>Safety Advice</h4>
+        <p className={`text-sm ${darkMode ? 'text-yellow-200' : 'text-yellow-700'}`}>
+          Avoid being alone with this person. If interaction is necessary, ensure you're in a public place with other people.
+        </p>
+      </div>
+
+      <button
+        onClick={() => onNavigate('home')}
+        className="w-full mt-6 bg-gradient-to-r from-blue-500 to-teal-500 text-white p-3 rounded-lg hover:from-blue-600 hover:to-teal-600"
+      >
+        Back to Home
+      </button>
+    </div>
+  );
+};
+
+const SettingsScreen = ({ onNavigate, darkMode, setDarkMode }) => {
+  return (
+    <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+      <div className="mb-6">
+        <button
+          onClick={() => onNavigate('home')}
+          className={darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-800'}
+        >
+          ← Back
+        </button>
+        <h2 className={`text-2xl font-bold mt-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Settings</h2>
+      </div>
+
+      <div className="space-y-6">
+        <div className={`rounded-lg shadow-sm p-4 ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
+          <h3 className={`font-semibold mb-3 ${darkMode ? 'text-white' : ''}`}>Appearance</h3>
+          <div className="flex items-center justify-between">
+            <span>Dark Mode</span>
+            <label className="switch">
+              <input 
+                type="checkbox" 
+                checked={darkMode}
+                onChange={() => setDarkMode(!darkMode)}
+              />
+              <span className="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div className={`rounded-lg shadow-sm p-4 ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
+          <h3 className={`font-semibold mb-3 ${darkMode ? 'text-white' : ''}`}>Privacy</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span>Share Location</span>
+              <label className="switch">
+                <input type="checkbox" defaultChecked />
+                <span className="slider round"></span>
+              </label>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Notifications</span>
+              <label className="switch">
+                <input type="checkbox" defaultChecked />
+                <span className="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div className={`rounded-lg shadow-sm p-4 ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
+          <h3 className={`font-semibold mb-3 ${darkMode ? 'text-white' : ''}`}>Support</h3>
+          <div className="space-y-3">
+            <button onClick={() => {}} className={`w-full text-left py-2 flex items-center ${darkMode ? 'text-gray-300' : ''}`}>
+              <FileText className="w-5 h-5 mr-2 text-gray-600" />
+              Terms of Service
+            </button>
+            <button onClick={() => {}} className={`w-full text-left py-2 flex items-center ${darkMode ? 'text-gray-300' : ''}`}>
+              <Shield className="w-5 h-5 mr-2 text-gray-600" />
+              Privacy Policy
+            </button>
+            <button onClick={() => {}} className={`w-full text-left py-2 flex items-center ${darkMode ? 'text-gray-300' : ''}`}>
+              <AlertTriangle className="w-5 h-5 mr-2 text-gray-600" />
+              Report an Issue
+            </button>
+          </div>
+        </div>
+
+        <div className="text-center pt-4">
+          <p className={darkMode ? 'text-gray-500' : 'text-gray-600'}>Version 1.0.0</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SafeGuardApp;
