@@ -12,7 +12,7 @@ const SafeGuardApp = () => {
 
   const screens = {
     home: <HomeScreen onNavigate={setCurrentScreen} isVerified={isVerified} darkMode={darkMode} />,
-    verify: <VerificationScreen onNavigate={setCurrentScreen} onVerify={setIsVerified} darkMode={darkMode} />,
+    verify: <VerificationScreen onNavigate={set极Screen} onVerify={setIsVerified} darkMode={darkMode} />,
     check: <CheckPersonScreen onNavigate={setCurrentScreen} darkMode={darkMode} />,
     report: <ReportScreen onNavigate={setCurrentScreen} darkMode={darkMode} />,
     results: <ResultsScreen onNavigate={setCurrentScreen} darkMode={darkMode} />,
@@ -66,7 +66,7 @@ const HomeScreen = ({ onNavigate, isVerified, darkMode }) => (
       {!isVerified && (
         <button
           onClick={() => onNavigate('verify')}
-          className="w-full bg-gradient极o-r from-purple-500 to-pink-500 text-white p-4 rounded-lg flex items-center shadow-lg hover:shadow-xl transition-all"
+          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-lg flex items-center shadow-lg hover:shadow-xl transition-all"
         >
           <UserCheck className="w-6 h-6 mr-3" />
           <div className="text-left">
@@ -118,7 +118,7 @@ const HomeScreen = ({ onNavigate, isVerified, darkMode }) => (
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-blue-600">3.2K</div>
-          <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Safety Checks</div>
+          <div className={`text-sm ${darkMode ? 'text-gray-300极' : 'text-gray-600'}`}>Safety Checks</div>
         </div>
       </div>
     </div>
@@ -172,7 +172,7 @@ const VerificationScreen = ({ onNavigate, onVerify, darkMode }) => {
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">
           <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Step {step} of 3</span>
-          <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>{Math.round((step / 3) * 100)}%</span>
+         极 <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>{Math.round((step / 3) * 100)}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
@@ -290,7 +290,7 @@ const VerificationScreen = ({ onNavigate, onVerify, darkMode }) => {
 
           <button
             onClick={handleSubmit}
-            className="w-full bg-green-500 text-white p-3 rounded-lg hover:极-green-600"
+            className="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600"
           >
             Submit for Verification
           </button>
@@ -569,7 +569,7 @@ const ResultsScreen = ({ onNavigate, darkMode }) => {
             <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Previous Reports</div>
           </div>
           <div className="text-right">
-            <div className={`text-lg font-bold ${darkMode ? 'text-white' : ''}`}>87%</极>
+            <div className={`text-lg font-bold ${darkMode ? 'text-white' : ''}`}>87%</div>
             <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Match Accuracy</div>
           </div>
         </div>
