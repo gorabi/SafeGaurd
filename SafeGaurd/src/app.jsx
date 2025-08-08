@@ -3,6 +3,6 @@ import SafeGuardApp from './components/SafeGuardApp.jsx';
 
 const App = () => {
   return <SafeGuardApp />;
-  };
+};
 
-  export default App;
+export default App;
