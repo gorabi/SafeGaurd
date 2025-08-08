@@ -1,13 +1,16 @@
-
 import React, { useState } from 'react';
 import {
-  Shield, Camera, Search, Users, Lock, 
-  AlertTriangle, CheckCircle, UserCheck,
-  Settings, Flag, FileText, MapPin, Clock
+  Shield, Camera, Search, Users, Lock, AlertTriangle,
+  CheckCircle, UserCheck, Settings, Flag, FileText, MapPin, Clock
 } from 'lucide-react';
 
+/**
+ * SafeGuardApp - Single-file main component (split later إذا أحببت)
+ * تم تبسيط الشاشات والحفاظ على الوظائف الأساسية
+ */
+
 const SafeGuardApp = () => {
-  const [currentScreen, setCurrentScreen] = useState('home');
+  const [currentScreen, setCurrentScreen] = useState('home'); // home, verify, check, report, results, settings
   const [isVerified, setIsVerified] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -20,439 +23,232 @@ const SafeGuardApp = () => {
     settings: <SettingsScreen onNavigate={setCurrentScreen} darkMode={darkMode} setDarkMode={setDarkMode} />
   };
 
-  const bgClass = darkMode 
-    ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" 
-    : "bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900";
-
   return (
-    <div className={`min-h-screen ${bgClass}`}>
-      <div className={`container mx-auto max-w-md min-h-screen ${darkMode ? 'bg-gray-800 text-white' : 'bg-white shadow-2xl'}`}>
+    <div className={`min-h-screen ${darkMode ? 'dark' : 'light'}`} style={{ padding: 12 }}>
+      <div className="container" style={{ maxWidth: 680 }}>
         {screens[currentScreen]}
       </div>
     </div>
   );
 };
 
-const HomeScreen = ({ onNavigate, isVerified, darkMode }) => (
-  <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gradient-to-b from-purple-50 to-white'}`}>
-    <div className="text-center mb-8 pt-8">
-      <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-        <Shield className="w-10 h-10 text-white" />
+/* -------------------- Home -------------------- */
+const HomeScreen = ({ onNavigate, isVerified }) => {
+  return (
+    <div className="card">
+      <div className="text-center mb-4">
+        <div className="w-20 rounded-full" style={{ background: 'linear-gradient(90deg,#7c3aed,#4f46e5)', display:'inline-flex', alignItems:'center', justifyContent:'center', height:80 }}>
+          <Shield style={{ color: 'white' }} />
+        </div>
+        <h1 className="mb-2" style={{ fontSize: 24, fontWeight: 700 }}>SafeGuard</h1>
+        <p className="small">Your safety, our priority</p>
       </div>
-      <h1 className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'} mb-2`}>SafeGuard</h1>
-      <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Your safety, our priority</p>
-    </div>
 
-    <div className={`p-4 rounded-lg mb-6 ${
-      isVerified
-        ? 'bg-green-50 border border-green-200'
-        : 'bg-orange-50 border border-orange-200'
-    } ${darkMode ? 'bg-opacity-20' : ''}`}>
-      <div className="flex items-center">
-        {isVerified ? (
-          <>
-            <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-            <span className="text-green-800 font-medium">Verified Member</span>
-          </>
-        ) : (
-          <>
-            <AlertTriangle className="w-5 h-5 text-orange-600 mr-2" />
-            <span className="text-orange-800 font-medium">Verification Required</span>
-          </>
-        )}
-      </div>
-    </div>
-
-    <div className="space-y-4">
-      {!isVerified && (
-        <button
-          onClick={() => onNavigate('verify')}
-          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-lg flex items-center shadow-lg hover:shadow-xl transition-all"
-        >
-          <UserCheck className="w-6 h-6 mr-3" />
-          <div className="text-left">
-            <div className="font-semibold">Verify Identity</div>
-            <div className="text-sm opacity-90">Secure your account with ID verification</div>
-          </div>
-        </button>
-      )}
-
-      <button
-        onClick={() => isVerified && onNavigate('check')}
-        disabled={!isVerified}
-        className={`w-full p-4 rounded-lg flex items-center shadow-lg transition-all ${
-          isVerified
-            ? 'bg-gradient-to-r from-blue-500 to-teal-500 text-white hover:shadow-xl'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-        }`}
-      >
-        <Search className="w-6 h-6 mr-3" />
-        <div className="text-left">
-          <div className="font-semibold">Check Someone</div>
-          <div className="text-sm opacity-90">Search for safety reports</div>
+      <div style={{ marginTop: 12 }}>
+        <div style={{ marginBottom: 12 }}>
+          <strong>Status: </strong>
+          {isVerified ? (
+            <span style={{ color: '#047857' }}><CheckCircle /> Verified Member</span>
+          ) : (
+            <span style={{ color: '#b45309' }}><AlertTriangle /> Verification Required</span>
+          )}
         </div>
-      </button>
 
-      <button
-        onClick={() => isVerified && onNavigate('report')}
-        disabled={!isVerified}
-        className={`w-full p-4 rounded-lg flex items-center shadow-lg transition-all ${
-          isVerified
-            ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white hover:shadow-xl'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-        }`}
-      >
-        <AlertTriangle className="w-6 h-6 mr-3" />
-        <div className="text-left">
-          <div className="font-semibold">Report Experience</div>
-          <div className="text-sm opacity-90">Share anonymously to help others</div>
-        </div>
-      </button>
-    </div>
+        <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
+          {!isVerified && (
+            <button className="btn btn-primary" onClick={() => onNavigate('verify')}>
+              <UserCheck /> Verify Account
+            </button>
+          )}
 
-    <div className={`mt-8 rounded-lg p-4 shadow-lg ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
-      <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-800'} mb-3`}>Community Impact</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="text-center">
-          <div className="text-2xl font-bold text-purple-600">12.4K</div>
-          <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Verified Users</div>
-        </div>
-        <div className="text-center">
-          <div className="text-2xl font-bold text-blue-600">3.2K</div>
-          <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Safety Checks</div>
+          <button className="btn btn-ghost" onClick={() => onNavigate('check')}>
+            <Search /> Check Person
+          </button>
+
+          <button
+            className="btn"
+            onClick={() => onNavigate('report')}
+            style={{ background: '#ef4444', color: 'white' }}
+          >
+            <Flag /> Report Experience
+          </button>
+
+          <button className="btn btn-ghost" onClick={() => onNavigate('results')}>
+            <FileText /> Results
+          </button>
+
+          <button className="btn btn-ghost" onClick={() => onNavigate('settings')}>
+            <Settings /> Settings
+          </button>
         </div>
       </div>
     </div>
+  );
+};
 
-    <div className={`mt-6 p-4 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-blue-50 border-blue-200'}`}>
-      <div className="flex items-start">
-        <Lock className="w-5 h-5 text-blue-600 mr-2 mt-0.5" />
-        <div className={`text-sm ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
-          <strong>Privacy First:</strong> All data is encrypted and anonymous. Your identity is never shared with others.
-        </div>
-      </div>
-    </div>
-
-    <div className="mt-6 text-center">
-      <button 
-        onClick={() => onNavigate('settings')}
-        className="text-gray-500 hover:text-gray-700"
-      >
-        <Settings className="w-6 h-6 mx-auto" />
-        <span className="text-sm">Settings</span>
-      </button>
-    </div>
-  </div>
-);
-
-const VerificationScreen = ({ onNavigate, onVerify, darkMode }) => {
+/* -------------------- Verification -------------------- */
+const VerificationScreen = ({ onNavigate, onVerify }) => {
   const [step, setStep] = useState(1);
-  const [idUploaded, setIdUploaded] = useState(false);
   const [selfieUploaded, setSelfieUploaded] = useState(false);
+  const [idUploaded, setIdUploaded] = useState(false);
 
-  const handleSubmit = () => {
-    if (idUploaded && selfieUploaded) {
-      onVerify(true);
-      onNavigate('home');
-    }
+  const submitVerification = () => {
+    // هنا تكون نقطة الاتصال للخادم في التطبيق الكامل
+    // سأتظاهر بأنها ناجحة
+    onVerify(true);
+    onNavigate('home');
   };
 
   return (
-    <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gradient-to-b from-purple-50 to-white'}`}>
-      <div className="mb-6">
-        <button
-          onClick={() => onNavigate('home')}
-          className={darkMode ? 'text-purple-400 hover:text-purple-300' : 'text-purple-600 hover:text-purple-800'}
-        >
-          ← Back
-        </button>
-        <h2 className={`text-2xl font-bold mt-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Identity Verification</h2>
-        <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>This ensures our community stays safe and authentic</p>
-      </div>
-
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Step {step} of 3</span>
-          <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>{Math.round((step / 3) * 100)}%</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-purple-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(step / 3) * 100}%` }}
-          />
-        </div>
-      </div>
+    <div className="card">
+      <h2 style={{ fontSize: 18, marginBottom: 8 }}>Account Verification</h2>
 
       {step === 1 && (
-        <div className="space-y-6">
-          <div className="text-center">
-            <Camera className="w-16 h-16 text-purple-500 mx-auto mb-4" />
-            <h3 className={`text-xl font-semibold mb-2 ${darkMode ? 'text-white' : ''}`}>Upload ID Document</h3>
-            <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>We need to verify you're a real person. Your ID will be deleted after verification.</p>
-          </div>
-
-          <div className={`border-2 border-dashed rounded-lg p-8 text-center ${darkMode ? 'border-gray-600' : 'border-purple-300'}`}>
-            {idUploaded ? (
-              <div className="text-green-600">
-                <CheckCircle className="w-12 h-12 mx-auto mb-2" />
-                <p>ID Document Uploaded</p>
-              </div>
-            ) : (
-              <>
-                <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                <p className={`mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Take a photo of your ID</p>
-                <button
-                  onClick={() => setIdUploaded(true)}
-                  className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600"
-                >
-                  Take Photo
-                </button>
-              </>
-            )}
-          </div>
-
-          {idUploaded && (
-            <button
-              onClick={() => setStep(2)}
-              className="w-full bg-purple-500 text-white p-3 rounded-lg hover:bg-purple-600"
-            >
-              Continue
+        <div>
+          <p className="small">Step 1: Upload your ID</p>
+          <div style={{ marginTop: 8 }}>
+            <button className="btn btn-ghost" onClick={() => setIdUploaded(true)}>
+              Upload ID
             </button>
-          )}
+            {idUploaded && <span style={{ marginLeft: 8, color: '#059669' }}>ID Ready</span>}
+          </div>
+
+          <div style={{ marginTop: 12 }}>
+            <button className="btn btn-primary" onClick={() => setStep(2)}>Continue</button>
+            <button className="btn btn-ghost" onClick={() => onNavigate('home')} style={{ marginLeft: 8 }}>Cancel</button>
+          </div>
         </div>
       )}
-      
+
       {step === 2 && (
-        <div className="space-y-6">
-          <div className="text-center">
-            <Users className="w-16 h-16 text-purple-500 mx-auto mb-4" />
-            <h3 className={`text-xl font-semibold mb-2 ${darkMode ? 'text-white' : ''}`}>Take a Selfie</h3>
-            <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Hold your ID next to your face so we can verify it's really you.</p>
-          </div>
-          
-          <div className={`border-2 border-dashed rounded-lg p-8 text-center ${darkMode ? 'border-gray-600' : 'border-purple-300'}`}>
-            {selfieUploaded ? (
-              <div className="text-green-600">
-                <CheckCircle className="w-12 h-12 mx-auto mb-2" />
-                <p>Selfie Uploaded</p>
-              </div>
-            ) : (
-              <>
-                <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                <p className={`mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Take a selfie with your ID</p>
-                <button
-                  onClick={() => setSelfieUploaded(true)}
-                  className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600"
-                >
-                  Take Selfie
-                </button>
-              </>
-            )}
-          </div>
-          
-          {selfieUploaded && (
-            <button
-              onClick={() => setStep(3)}
-              className="w-full bg-purple-500 text-white p-3 rounded-lg hover:bg-purple-600"
-            >
-              Continue
+        <div>
+          <p className="small">Step 2: Take a selfie</p>
+          <div style={{ marginTop: 8 }}>
+            <button className="btn btn-ghost" onClick={() => setSelfieUploaded(true)}>
+              Take Selfie
             </button>
-          )}
-        </div>
-      )}
-
-      {step === 3 && (
-        <div className="space-y-6">
-          <div className="text-center">
-            <Shield className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h3 className={`text-xl font-semibold mb-2 ${darkMode ? 'text-white' : ''}`}>Review & Submit</h3>
-            <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Your verification will be processed within 24 hours.</p>
+            {selfieUploaded && <span style={{ marginLeft: 8, color: '#059669' }}>Selfie Ready</span>}
           </div>
 
-          <div className={`rounded-lg p-4 space-y-3 ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-            <div className="flex items-center justify-between">
-              <span>ID Document</span>
-              <CheckCircle className="w-5 h-5 text-green-500" />
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Selfie with ID</span>
-              <CheckCircle className="w-5 h-5 text-green-500" />
-            </div>
+          <div style={{ marginTop: 12 }}>
+            <button
+              className="btn btn-primary"
+              onClick={submitVerification}
+              disabled={!(selfieUploaded && idUploaded)}
+              style={{ opacity: selfieUploaded && idUploaded ? 1 : 0.6 }}
+            >
+              Finish Verification
+            </button>
+            <button className="btn btn-ghost" onClick={() => setStep(1)} style={{ marginLeft: 8 }}>Back</button>
           </div>
-
-          <div className={`rounded-lg p-4 border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-blue-50 border-blue-200'}`}>
-            <h4 className={`font-semibold mb-2 ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>Privacy Promise</h4>
-            <ul className={`text-sm space-y-1 ${darkMode ? 'text-blue-200' : 'text-blue-700'}`}>
-              <li>• Your ID will be deleted after verification</li>
-              <li>• Your personal data is never shared</li>
-              <li>• All reports remain completely anonymous</li>
-            </ul>
-          </div>
-
-          <button
-            onClick={handleSubmit}
-            className="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600"
-          >
-            Submit for Verification
-          </button>
         </div>
       )}
     </div>
   );
 };
 
-const CheckPersonScreen = ({ onNavigate, darkMode }) => {
-  const [photoUploaded, setPhotoUploaded] = useState(false);
+/* -------------------- Check Person -------------------- */
+const CheckPersonScreen = ({ onNavigate }) => {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState(null);
 
-  const handleCheck = () => {
-    if (photoUploaded) {
-      onNavigate('results');
-    }
+  const doSearch = () => {
+    // محاكاة بحث
+    setResults({
+      name: query || 'Unknown',
+      safetyScore: Math.floor(Math.random() * 100)
+    });
   };
 
   return (
-    <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gradient-to-b from-blue-50 to-white'}`}>
-      <div className="mb-6">
-        <button
-          onClick={() => onNavigate('home')}
-          className={darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}
-        >
-          ← Back
-        </button>
-        <h2 className={`text-2xl font-bold mt-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Check Someone</h2>
-        <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Upload a photo to check for safety reports</p>
-      </div>
+    <div className="card">
+      <h2 style={{ fontSize: 18 }}>Check Person</h2>
+      <div style={{ marginTop: 8 }}>
+        <input
+          type="text"
+          placeholder="اسم أو تفاصيل"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{ width: '100%', padding: 8, borderRadius: 8, border: '1px solid #e5e7eb' }}
+        />
+        <div style={{ marginTop: 8 }}>
+          <button className="btn btn-primary" onClick={doSearch}><Search /> Search</button>
+          <button className="btn btn-ghost" onClick={() => onNavigate('home')} style={{ marginLeft: 8 }}>Back</button>
+        </div>
 
-      <div className="space-y-6">
-        <div className={`rounded-lg p-4 border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-yellow-50 border-yellow-200'}`}>
-          <div className="flex items-start">
-            <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
-            <div className={darkMode ? 'text-yellow-300' : 'text-yellow-800'}>
-              <strong>Important:</strong> Only upload photos with clear consent. This feature is for safety verification only.
-            </div>
+        {results && (
+          <div style={{ marginTop: 12 }}>
+            <div><strong>Name:</strong> {results.name}</div>
+            <div><strong>Safety score:</strong> {results.safetyScore}%</div>
           </div>
-        </div>
-
-        <div className={`border-2 border-dashed rounded-lg p-8 text-center ${darkMode ? 'border-gray-600' : 'border-blue-300'}`}>
-          {photoUploaded ? (
-            <div className="text-green-600">
-              <CheckCircle className="w-12 h-12 mx-auto mb-2" />
-              <p>Photo Uploaded</p>
-              <p className={`text-sm mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Ready to check</p>
-            </div>
-          ) : (
-            <>
-              <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-              <p className={`mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Upload a clear photo</p>
-              <button
-                onClick={() => setPhotoUploaded(true)}
-                className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
-              >
-                Choose Photo
-              </button>
-            </>
-          )}
-        </div>
-
-        {photoUploaded && (
-          <button
-            onClick={handleCheck}
-            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600"
-          >
-            Check for Reports
-          </button>
         )}
       </div>
     </div>
   );
 };
 
-const ReportScreen = ({ onNavigate, darkMode }) => {
-  const [reportText, setReportText] = useState('');
-
-  const handleSubmit = () => {
-    // هنا يمكنك إضافة منطق إرسال التقرير
-    alert('Report submitted: ' + reportText);
-    onNavigate('home'); // العودة إلى الشاشة الرئيسية بعد الإرسال
+/* -------------------- Report -------------------- */
+const ReportScreen = ({ onNavigate }) => {
+  const [text, setText] = useState('');
+  const submit = () => {
+    // محاكاة إرسال تقرير - في التطبيق الحقيقي سترسل للخادم
+    alert('تم إرسال التقرير — شكراً لمشاركتك (تمت المحاكاة)');
+    setText('');
+    onNavigate('home');
   };
 
   return (
-    <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gradient-to-b from-red-50 to-white'}`}>
-      <div className="mb-6">
-        <button
-          onClick={() => onNavigate('home')}
-          className={darkMode ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-800'}
-        >
-          ← Back
-        </button>
-        <h2 className={`text-2xl font-bold mt-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Report Experience</h2>
-        <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Please share your experience anonymously.</p>
-      </div>
-
+    <div className="card">
+      <h2 style={{ fontSize: 18 }}>Report Experience</h2>
       <textarea
-        value={reportText}
-        onChange={(e) => setReportText(e.target.value)}
-        rows="5"
-        placeholder="Describe your experience..."
-        className={`w-full p-3 rounded-lg border ${darkMode ? 'bg-gray-700 text-gray-300 border-gray-600' : 'bg-white border-gray-300'}`}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="اكتب ما حدث (يمكنك البقاء مجهول الهوية)"
+        style={{ width: '100%', minHeight: 120, padding: 8, borderRadius: 8, marginTop: 8, border: '1px solid #e5e7eb' }}
       />
-
-      <button
-        onClick={handleSubmit}
-        disabled={!reportText}
-        className={`w-full mt-4 p-3 rounded-lg ${reportText ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-      >
-        Submit Report
-      </button>
+      <div style={{ marginTop: 8 }}>
+        <button className="btn btn-primary" onClick={submit} disabled={!text.trim()}>
+          Submit Report
+        </button>
+        <button className="btn btn-ghost" onClick={() => onNavigate('home')} style={{ marginLeft: 8 }}>Cancel</button>
+      </div>
     </div>
   );
 };
 
-const ResultsScreen = ({ onNavigate, darkMode }) => (
-  <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-    <div className="mb-6">
-      <button
-        onClick={() => onNavigate('home')}
-        className={darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}
-      >
-        ← Back
-      </button>
-      <h2 className={`text-2xl font-bold mt-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Results</h2>
-      <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Here are the safety reports found.</p>
-    </div>
-    {/* محتوى النتائج هنا */}
-    <div className={`rounded-lg p-4 border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}>
-      <p className={darkMode ? 'text-gray-300' : 'text-gray-800'}>No reports found for this individual.</p>
-    </div>
-  </div>
-);
-
-const SettingsScreen = ({ onNavigate, darkMode, setDarkMode }) => (
-  <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-    <div className="mb-6">
-      <button
-        onClick={() => onNavigate('home')}
-        className={darkMode ? 'text-purple-400 hover:text-purple-300' : 'text-purple-600 hover:text-purple-800'}
-      >
-        ← Back
-      </button>
-      <h2 className={`text-2xl font-bold mt-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Settings</h2>
-      <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Adjust your preferences.</p>
-    </div>
-
-    <div className="space-y-4">
-      <div className={`flex items-center ${darkMode ? 'text-gray-300' : 'text-gray-800'}`}>
-        <input
-          type="checkbox"
-          checked={darkMode}
-          onChange={() => setDarkMode(!darkMode)}
-          className="mr-2"
-        />
-        <label>Enable Dark Mode</label>
+/* -------------------- Results -------------------- */
+const ResultsScreen = ({ onNavigate }) => {
+  return (
+    <div className="card">
+      <h2 style={{ fontSize: 18 }}>Results</h2>
+      <p className="small">لم يتم ربط هذا القسم بعد بقاعدة بيانات حقيقية. يمكن عرض إحصاءات أو تقارير هنا.</p>
+      <div style={{ marginTop: 12 }}>
+        <button className="btn btn-ghost" onClick={() => onNavigate('home')}>Back</button>
       </div>
-      {/* إعدادات أخرى يمكن إضافتها هنا */}
     </div>
-  </div>
-);
+  );
+};
+
+/* -------------------- Settings -------------------- */
+const SettingsScreen = ({ onNavigate, darkMode, setDarkMode }) => {
+  return (
+    <div className="card">
+      <h2 style={{ fontSize: 18 }}>Settings</h2>
+      <div style={{ marginTop: 12 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="switch">
+            <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(!darkMode)} />
+            <span className="slider" />
+          </div>
+          <span>Enable Dark Mode</span>
+        </label>
+      </div>
+
+      <div style={{ marginTop: 12 }}>
+        <button className="btn btn-ghost" onClick={() => onNavigate('home')}>Back</button>
+      </div>
+    </div>
+  );
+};
 
 export default SafeGuardApp;
